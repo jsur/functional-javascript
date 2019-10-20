@@ -38,7 +38,13 @@ function getStudentsByName(inputArr) {
 }
 
 // modify/move this function
-function getStudentsByID() { return students; }
+function getStudentsByID(currentStudents) {
+	const originalStudents = [...students]
+	students = currentStudents
+	const sortedStudents = sortStudentsByID()
+	students = originalStudents
+	return sortedStudents;
+}
 
 // *************************************
 
