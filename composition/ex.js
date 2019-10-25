@@ -5,8 +5,18 @@ function decrement(x) { return x - 1; }
 function double(x) { return x * 2; }
 function half(x) { return x / 2; }
 
-function compose() { return compose; }
-function pipe() { return pipe; }
+function pipe(...fns) {
+  return function piped(v) {
+    for (let fn of fns) {
+      v = fn(v);
+    }
+    return v;
+  }
+}
+
+function compose(...fns) {
+  return pipe(...fns.reverse());
+}
 
 var f1 = compose(increment,decrement);
 var f2 = pipe(decrement,increment);
