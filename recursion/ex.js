@@ -1,6 +1,15 @@
 "use strict";
 
-function isPalindrome() {}
+function isPalindrome(str) {
+  if (str.length <= 1) {
+    return true
+  }
+  const lastChar = str.length - 1
+  if (str[0] === str[lastChar]) {
+    return isPalindrome(str.slice(1, lastChar))
+  }
+  return false;
+}
 
 console.log( isPalindrome("") === true );
 console.log( isPalindrome("a") === true );
@@ -13,3 +22,5 @@ console.log( isPalindrome("ab") === false );
 console.log( isPalindrome("abc") === false );
 console.log( isPalindrome("abca") === false );
 console.log( isPalindrome("abcdba") === false );
+
+console.log( isPalindrome("saippuakauppias") === true );
