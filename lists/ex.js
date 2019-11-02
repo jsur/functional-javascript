@@ -1,55 +1,55 @@
 "use strict";
 
-/*
-function returnTwo() {
-  return 2;
-}
-
-function returnThree() {
-  return 3;
-}
-*/
-
-function returnVal(val) {
-  return function giveVal() {
-    return val
-  }
-}
-
 function add(num1, num2) {
   return num1 + num2;
 }
 
-// console.log(add(returnTwo(), returnThree()))
-
 function add2(func1, func2) {
-  add(func1(), func2())
+  return add(func1(), func2())
 }
 
-function addn(...fns) {
-  return function compose(v) {
-    let current = v
-    for (let i = 0; i < fns.length; i += 1) {
-      current = fns[i](current);
-    }
-    return current
+function constant(v) {
+  return function f() {
+    return v;
   }
 }
 
-function getUniques(arr = []) {
-  return Array.from(new Set(arr))
+const five = constant(5);
+const nine = constant(9);
+
+/*
+function addn(...fns) {
+  while (fns.length > 2) {
+    let [fn0, fn1, ...rest] = fns
+    fns = [
+      function f(){
+        return add2(fn0, fn1);
+      },
+      ...rest
+    ];
+  }
+  return add2(fns[0], fns[1]);
+}
+*/
+
+/*
+function addn([fn0, fn1, ...rest]) {
+  if (rest.length === 0) return add2(fn0, fn1);
+  return addn([
+    function f() {
+      return add2(fn0, fn1);
+    },
+    ...rest
+  ]);
+}
+*/
+
+function addn(fns = []) {
+  return fns.reduce(function reducer(composedFn, fn) {
+    return function f() {
+      return add2(composedFn, fn);
+    }
+  })();
 }
 
-function filterInEvens(arr = []) {
-  return arr.filter(item => item % 2 === 0)
-}
-
-const nums = [1,2,3,4,4,4,5,5,6,7,8,8,8]
-
-const vals = addn(
-  getUniques,
-  filterInEvens
-)(nums)
-
-console.log(addn(...vals.map(item => returnVal(item)))(nums))
-
+console.log(addn([constant(3), constant(7), five, nine, constant(11)]));
