@@ -9,17 +9,11 @@ var nums = {
 	third: [1,1,3,2]
 };
 
-var filteredNums = filterObj(function(list){
-	return isOdd(listSum(list));
-},nums);
-
-var filteredNumsProducts = mapObj(function(list){
-	return listProduct(list);
-},filteredNums);
-
-console.log(reduceObj(function(acc,v){
-	return acc + v;
-},0,filteredNumsProducts));
+console.log([
+	curry(2)(filterObj)(compose(isOdd, listSum)),
+	curry(2)(mapObj)(listProduct),
+	curry(3)(reduceObj)(sum)(0)
+].reduce(binary(pipe))(nums));
 // 38886
 
 
